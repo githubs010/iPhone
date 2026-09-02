@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Data Logger & Auto-Parser</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 20px; display: flex; justify-content: center; }
+        .form-container { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 500px; }
+        h2 { text-align: center; color: #333; }
+        .form-group { margin-bottom: 12px; }
+        label { display: block; margin-bottom: 4px; font-weight: bold; color: #555; font-size: 14px; }
+        input, textarea { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 14px; }
+        textarea { height: 90px; resize: vertical; }
+        button { width: 100%; background-color: #007BFF; color: white; border: none; padding: 12px; border-radius: 4px; font-size: 16px; cursor: pointer; margin-top: 10px; }
+        button:hover { background-color: #0056b3; }
+        .parse-btn { background-color: #28a745; margin-bottom: 15px; }
+        .parse-btn:hover { background-color: #218838; }
+        #status-message { text-align: center; margin-top: 15px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Device Data Logger</h2>
+    
+    <!-- Raw Data Paste Section -->
+    <div class="form-group">
+        <label for="rawTextInput">Paste Raw Device Data Here:</label>
+        <textarea id="rawTextInput" placeholder="Paste raw text dump..."></textarea>
+    </div>
+    <button type="button" class="parse-btn" onclick="parseRawData()">Auto-Fill Form</button>
+
+    <form id="deviceForm">
+        <div class="form-group">
+            <label for="modelNumber">Model no</label>
+            <input type="text" id="modelNumber" required>
+        </div>
+        <div class="form-group">
+            <label for="colour">Colour</label>
+            <input type="text" id="colour" required>
+        </div>
+        <div class="form-group">
+            <label for="iphoneSeries">iPhone series</label>
+            <input type="text" id="iphoneSeries" required>
+        </div>
+        <div class="form-group">
+            <label for="imei1">Ime 1</label>
+            <input type="text" id="imei1" required>
+        </div>
+        <div class="form-group">
+            <label for="imei2">Ime 2</label>
+            <input type="text" id="imei2">
+        </div>
+        <div class="form-group">
+            <label for="deviceName">Divice name</label>
+            <input type="text" id="deviceName" required>
+        </div>
+        <button type="submit" id="submitBtn">Save to Google Sheet</button>
+    </form>
+    <div id="status-message"></div>
+</div>
+
+<script>
+    // Your deployed Google Apps Script Web App URL
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbz5NImuD9H5lApJ9T2EXR7ZiCQXj421htZcco2jfoxuu67R3s-bFM4_Pp7k5By401GI/exec';
+
+    function parseRawData() {
+        const text = document.getElementById('rawTextInput').value;
+
+        function extractValue(key) {
+            const regex = new RegExp(key + '\\s+(.+)');
+            const match = text.match(regex);
+            return match ? match[1].trim() : '';
+        }
+
+        const modelNo = extractValue('ModelNumber');
+        const deviceName = extractValue('DeviceName');
+        const imei1 = extractValue('InternationalMobileEquipmentIdentity');
+        
+        const imei2Match = text.match(/InternationalMobileEquipmentIdentity2\s+(.+)/);
+        const imei2 = imei2Match ? imei2Match[1].trim() : '';
+
+        let iphoneSeries = '';
+        let colour = '';
+
+        if (modelNo.startsWith('MQ1')) {
+            iphoneSeries = 'iPhone 14 Pro';
+            if (['MQ163', 'MQ183', 'MQ143', 'MQ173'].includes(modelNo)) {
+                colour = 'Gold';
+            } else if (['MQ1D3', 'MQ1F3', 'MQ1C3', 'MQ1E3'].includes(modelNo)) {
+                colour = 'Deep Purple';
+            } else if (['MQ1K3', 'MQ1M3', 'MQ1J3', 'MQ1L3'].includes(modelNo)) {
+                colour = 'Space Black';
+            } else if (['MQ1U3', 'MQ1W3', 'MQ1R3', 'MQ1V3'].includes(modelNo)) {
+                colour = 'Silver';
+            } else {
+                colour = 'Gold';
+            }
+        }
+
+        document.getElementById('modelNumber').value = modelNo;
+        document.getElementById('colour').value = colour;
+        document.getElementById('iphoneSeries').value = iphoneSeries;
+        document.getElementById('imei1').value = imei1;
+        document.getElementById('imei2').value = imei2;
+        document.getElementById('deviceName').value = deviceName;
+    }
+
+    const form = document.getElementById('deviceForm');
+    const statusMessage = document.getElementById('status-message');
+
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+        document.getElementById('submitBtn').disabled = true;
+        statusMessage.style.color = '#007BFF';
+        statusMessage.textContent = 'Saving data to sheet...';
+
+        const formData = {
+            modelNumber: document.getElementById('modelNumber').value,
+            colour: document.getElementById('colour').value,
+            iphoneSeries: document.getElementById('iphoneSeries').value,
+            imei1: document.getElementById('imei1').value,
+            imei2: document.getElementById('imei2').value,
+            deviceName: document.getElementById('deviceName').value
+        };
+
+        fetch(scriptURL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+        })
+        .then(() => {
+            statusMessage.style.color = 'green';
+            statusMessage.textContent = 'Successfully saved to Google Sheet!';
+            form.reset();
+            document.getElementById('rawTextInput').value = '';
+            document.getElementById('submitBtn').disabled = false;
+        })
+        .catch(error => {
+            statusMessage.style.color = 'red';
+            statusMessage.textContent = 'Error saving data.';
+            document.getElementById('submitBtn').disabled = false;
+        });
+    });
+</script>
+
+</body>
+</html>
+
