@@ -24,7 +24,6 @@
 <div class="form-container">
     <h2>Device Data Logger</h2>
     
-    <!-- Raw Data Paste Section -->
     <div class="form-group">
         <label for="rawTextInput">Paste Raw Device Data Here:</label>
         <textarea id="rawTextInput" placeholder="Paste raw text dump..."></textarea>
@@ -35,14 +34,6 @@
         <div class="form-group">
             <label for="modelNumber">Model no</label>
             <input type="text" id="modelNumber" required>
-        </div>
-        <div class="form-group">
-            <label for="serialNumber">Serial no</label>
-            <input type="text" id="serialNumber" required>
-        </div>
-        <div class="form-group">
-            <label for="storage">Device Storage</label>
-            <input type="text" id="storage" required>
         </div>
         <div class="form-group">
             <label for="colour">Colour</label>
@@ -70,8 +61,100 @@
 </div>
 
 <script>
-    // Your deployed Google Apps Script Web App URL
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbxL3dzB7E_1rQVwpSUeSDPlI0xEujJa1boCKh66oHuUz3F6GVQKpZFDQYFcSOUygIcZ/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbz5NImuD9H5lApJ9T2EXR7ZiCQXj421htZcco2jfoxuu67R3s-bFM4_Pp7k5By401GI/exec';
+
+    // Master Database for iPhone Models
+    const iphoneDB = {
+        // iPhone 13 - (PRODUCT)RED
+        "MLPJ3": { series: "iPhone 13", color: "(PRODUCT)RED" },
+        "MLMQ3": { series: "iPhone 13", color: "(PRODUCT)RED" },
+        "MLDX3": { series: "iPhone 13", color: "(PRODUCT)RED" },
+        "MLNF3": { series: "iPhone 13", color: "(PRODUCT)RED" },
+        "MLQ93": { series: "iPhone 13", color: "(PRODUCT)RED" },
+        "MLN03": { series: "iPhone 13", color: "(PRODUCT)RED" },
+        "MLE33": { series: "iPhone 13", color: "(PRODUCT)RED" },
+        "MLNL3": { series: "iPhone 13", color: "(PRODUCT)RED" },
+        "MLQF3": { series: "iPhone 13", color: "(PRODUCT)RED" },
+        "MLN53": { series: "iPhone 13", color: "(PRODUCT)RED" },
+        "MLEA3": { series: "iPhone 13", color: "(PRODUCT)RED" },
+        "MLNR3": { series: "iPhone 13", color: "(PRODUCT)RED" },
+
+        // iPhone 13 - Starlight
+        "MLPG3": { series: "iPhone 13", color: "Starlight" },
+        "MLMM3": { series: "iPhone 13", color: "Starlight" },
+        "MLDV3": { series: "iPhone 13", color: "Starlight" },
+        "MLND3": { series: "iPhone 13", color: "Starlight" },
+        "3J818": { series: "iPhone 13", color: "Starlight" },
+        "MLQ73": { series: "iPhone 13", color: "Starlight" },
+        "MLMX3": { series: "iPhone 13", color: "Starlight" },
+        "MLE13": { series: "iPhone 13", color: "Starlight" },
+        "MLNJ3": { series: "iPhone 13", color: "Starlight" },
+        "MLQD3": { series: "iPhone 13", color: "Starlight" },
+        "MLN33": { series: "iPhone 13", color: "Starlight" },
+        "MLE73": { series: "iPhone 13", color: "Starlight" },
+        "MLNP3": { series: "iPhone 13", color: "Starlight" },
+
+        // iPhone 13 - Midnight
+        "MLA23": { series: "iPhone 13", color: "Midnight" },
+        "MLPF3": { series: "iPhone 13", color: "Midnight" },
+        "MLML3": { series: "iPhone 13", color: "Midnight" },
+        "MLDU3": { series: "iPhone 13", color: "Midnight" },
+        "MLNC3": { series: "iPhone 13", color: "Midnight" },
+        "3J817": { series: "iPhone 13", color: "Midnight" },
+        "3J827": { series: "iPhone 13", color: "Midnight" },
+        "3M761": { series: "iPhone 13", color: "Midnight" },
+        "MLQ63": { series: "iPhone 13", color: "Midnight" },
+        "MLN23": { series: "iPhone 13", color: "Midnight" },
+        "MLE03": { series: "iPhone 13", color: "Midnight" },
+        "MLNH3": { series: "iPhone 13", color: "Midnight" },
+        "MLQC3": { series: "iPhone 13", color: "Midnight" },
+        "MLE63": { series: "iPhone 13", color: "Midnight" },
+        "MLNN3": { series: "iPhone 13", color: "Midnight" },
+
+        // iPhone 13 - Blue
+        "MLPK3": { series: "iPhone 13", color: "Blue" },
+        "MLMT3": { series: "iPhone 13", color: "Blue" },
+        "MLDY3": { series: "iPhone 13", color: "Blue" },
+        "MLNG3": { series: "iPhone 13", color: "Blue" },
+        "3J821": { series: "iPhone 13", color: "Blue" },
+        "MLQA3": { series: "iPhone 13", color: "Blue" },
+        "MLN13": { series: "iPhone 13", color: "Blue" },
+        "MLE43": { series: "iPhone 13", color: "Blue" },
+        "MLNM3": { series: "iPhone 13", color: "Blue" },
+        "MLQG3": { series: "iPhone 13", color: "Blue" },
+        "MLN83": { series: "iPhone 13", color: "Blue" },
+        "MLEC3": { series: "iPhone 13", color: "Blue" },
+        "MLNT3": { series: "iPhone 13", color: "Blue" },
+
+        // iPhone 13 - Pink
+        "MLPH3": { series: "iPhone 13", color: "Pink" },
+        "MLMN3": { series: "iPhone 13", color: "Pink" },
+        "MLDW3": { series: "iPhone 13", color: "Pink" },
+        "MLNE3": { series: "iPhone 13", color: "Pink" },
+        "MLQ83": { series: "iPhone 13", color: "Pink" },
+        "MLMY3": { series: "iPhone 13", color: "Pink" },
+        "MLE23": { series: "iPhone 13", color: "Pink" },
+        "MLNK3": { series: "iPhone 13", color: "Pink" },
+        "MLQE3": { series: "iPhone 13", color: "Pink" },
+        "MLN43": { series: "iPhone 13", color: "Pink" },
+        "MLE93": { series: "iPhone 13", color: "Pink" },
+        "MLNQ3": { series: "iPhone 13", color: "Pink" },
+
+        // iPhone 13 - Green
+        "MNGD3": { series: "iPhone 13", color: "Green" },
+        "MNG93": { series: "iPhone 13", color: "Green" },
+        "MNGK3": { series: "iPhone 13", color: "Green" },
+        "MNGG3": { series: "iPhone 13", color: "Green" },
+        "3K581": { series: "iPhone 13", color: "Green" },
+        "MNGE3": { series: "iPhone 13", color: "Green" },
+        "MNGA3": { series: "iPhone 13", color: "Green" },
+        "MNGL3": { series: "iPhone 13", color: "Green" },
+        "MNGH3": { series: "iPhone 13", color: "Green" },
+        "MNGF3": { series: "iPhone 13", color: "Green" },
+        "MNGC3": { series: "iPhone 13", color: "Green" },
+        "MNGM3": { series: "iPhone 13", color: "Green" },
+        "MNGJ3": { series: "iPhone 13", color: "Green" }
+    };
 
     function parseRawData() {
         const text = document.getElementById('rawTextInput').value;
@@ -83,37 +166,23 @@
         }
 
         const modelNo = extractValue('ModelNumber');
-        const serialNo = extractValue('SerialNumber');
         const deviceName = extractValue('DeviceName');
         const imei1 = extractValue('InternationalMobileEquipmentIdentity');
         
         const imei2Match = text.match(/InternationalMobileEquipmentIdentity2\s+(.+)/);
         const imei2 = imei2Match ? imei2Match[1].trim() : '';
 
-        let iphoneSeries = '';
-        let colour = '';
-        let storage = '';
+        // Dictionary Lookup Logic
+        let iphoneSeries = 'Unknown / Not in DB';
+        let colour = 'Unknown / Not in DB';
 
-        if (modelNo.startsWith('MQ1')) {
-            iphoneSeries = 'iPhone 14 Pro';
-            storage = '256GB'; // MQ1 series maps to 256GB
-            
-            if (['MQ163', 'MQ183', 'MQ143', 'MQ173'].includes(modelNo)) {
-                colour = 'Gold';
-            } else if (['MQ1D3', 'MQ1F3', 'MQ1C3', 'MQ1E3'].includes(modelNo)) {
-                colour = 'Deep Purple';
-            } else if (['MQ1K3', 'MQ1M3', 'MQ1J3', 'MQ1L3'].includes(modelNo)) {
-                colour = 'Space Black';
-            } else if (['MQ1U3', 'MQ1W3', 'MQ1R3', 'MQ1V3'].includes(modelNo)) {
-                colour = 'Silver';
-            } else {
-                colour = 'Gold';
-            }
+        // Check if the parsed model number exists in our database
+        if (iphoneDB[modelNo]) {
+            iphoneSeries = iphoneDB[modelNo].series;
+            colour = iphoneDB[modelNo].color;
         }
 
         document.getElementById('modelNumber').value = modelNo;
-        document.getElementById('serialNumber').value = serialNo;
-        document.getElementById('storage').value = storage;
         document.getElementById('colour').value = colour;
         document.getElementById('iphoneSeries').value = iphoneSeries;
         document.getElementById('imei1').value = imei1;
@@ -132,8 +201,6 @@
 
         const formData = {
             modelNumber: document.getElementById('modelNumber').value,
-            serialNumber: document.getElementById('serialNumber').value,
-            storage: document.getElementById('storage').value,
             colour: document.getElementById('colour').value,
             iphoneSeries: document.getElementById('iphoneSeries').value,
             imei1: document.getElementById('imei1').value,
@@ -162,5 +229,5 @@
     });
 </script>
 
-</body> 
+</body>
 </html>
