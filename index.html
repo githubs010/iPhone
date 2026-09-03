@@ -69,17 +69,15 @@
 </div>
 
 <script>
+    // Your Web App URL
     const scriptURL = 'https://script.google.com/macros/s/AKfycbwQ45vmcDdwjOfEIJLfXwNhMdYtPkg1DfPsknMXLXqeuGGTVj49VPtpJowmkF5WbJE/exec';
 
     // Master Database for iPhone Models
     const iphoneDB = {
-        // iPhone 14 Pro
         "MQ143": { series: "iPhone 14 Pro", color: "Gold", storage: "256 GB" },
         "MQ163": { series: "iPhone 14 Pro", color: "Gold", storage: "256 GB" },
         "MQ183": { series: "iPhone 14 Pro", color: "Gold", storage: "256 GB" },
         "MQ173": { series: "iPhone 14 Pro", color: "Gold", storage: "256 GB" },
-
-        // iPhone 13 - (PRODUCT)RED
         "MLPJ3": { series: "iPhone 13", color: "(PRODUCT)RED", storage: "128 GB" },
         "MLMQ3": { series: "iPhone 13", color: "(PRODUCT)RED", storage: "128 GB" },
         "MLDX3": { series: "iPhone 13", color: "(PRODUCT)RED", storage: "128 GB" },
@@ -92,8 +90,6 @@
         "MLN53": { series: "iPhone 13", color: "(PRODUCT)RED", storage: "512 GB" },
         "MLEA3": { series: "iPhone 13", color: "(PRODUCT)RED", storage: "512 GB" },
         "MLNR3": { series: "iPhone 13", color: "(PRODUCT)RED", storage: "512 GB" },
-
-        // iPhone 13 - Starlight
         "MLPG3": { series: "iPhone 13", color: "Starlight", storage: "128 GB" },
         "MLMM3": { series: "iPhone 13", color: "Starlight", storage: "128 GB" },
         "MLDV3": { series: "iPhone 13", color: "Starlight", storage: "128 GB" },
@@ -107,8 +103,6 @@
         "MLN33": { series: "iPhone 13", color: "Starlight", storage: "512 GB" },
         "MLE73": { series: "iPhone 13", color: "Starlight", storage: "512 GB" },
         "MLNP3": { series: "iPhone 13", color: "Starlight", storage: "512 GB" },
-
-        // iPhone 13 - Midnight
         "MLA23": { series: "iPhone 13", color: "Midnight", storage: "128 GB" },
         "MLPF3": { series: "iPhone 13", color: "Midnight", storage: "128 GB" },
         "MLML3": { series: "iPhone 13", color: "Midnight", storage: "128 GB" },
@@ -124,8 +118,6 @@
         "MLQC3": { series: "iPhone 13", color: "Midnight", storage: "512 GB" },
         "MLE63": { series: "iPhone 13", color: "Midnight", storage: "512 GB" },
         "MLNN3": { series: "iPhone 13", color: "Midnight", storage: "512 GB" },
-
-        // iPhone 13 - Blue
         "MLPK3": { series: "iPhone 13", color: "Blue", storage: "128 GB" },
         "MLMT3": { series: "iPhone 13", color: "Blue", storage: "128 GB" },
         "MLDY3": { series: "iPhone 13", color: "Blue", storage: "128 GB" },
@@ -139,8 +131,6 @@
         "MLN83": { series: "iPhone 13", color: "Blue", storage: "512 GB" },
         "MLEC3": { series: "iPhone 13", color: "Blue", storage: "512 GB" },
         "MLNT3": { series: "iPhone 13", color: "Blue", storage: "512 GB" },
-
-        // iPhone 13 - Pink
         "MLPH3": { series: "iPhone 13", color: "Pink", storage: "128 GB" },
         "MLMN3": { series: "iPhone 13", color: "Pink", storage: "128 GB" },
         "MLDW3": { series: "iPhone 13", color: "Pink", storage: "128 GB" },
@@ -153,8 +143,6 @@
         "MLN43": { series: "iPhone 13", color: "Pink", storage: "512 GB" },
         "MLE93": { series: "iPhone 13", color: "Pink", storage: "512 GB" },
         "MLNQ3": { series: "iPhone 13", color: "Pink", storage: "512 GB" },
-
-        // iPhone 13 - Green
         "MNGD3": { series: "iPhone 13", color: "Green", storage: "128 GB" },
         "MNG93": { series: "iPhone 13", color: "Green", storage: "128 GB" },
         "MNGK3": { series: "iPhone 13", color: "Green", storage: "128 GB" },
@@ -173,18 +161,20 @@
     function parseRawData() {
         const text = document.getElementById('rawTextInput').value;
 
+        // FIXED: Added '^' and 'm' flag to match the EXACT start of a line
+        // This stops it from accidentally pulling "BasebandSerialNumber"
         function extractValue(key) {
-            const regex = new RegExp(key + '\\s+(.+)');
+            const regex = new RegExp('^\\s*' + key + '\\s+(.+)', 'm');
             const match = text.match(regex);
             return match ? match[1].trim() : '';
         }
 
         const modelNo = extractValue('ModelNumber');
-        const serialNo = extractValue('SerialNumber');
+        const serialNo = extractValue('SerialNumber'); 
         const deviceName = extractValue('DeviceName');
         const imei1 = extractValue('InternationalMobileEquipmentIdentity');
         
-        const imei2Match = text.match(/InternationalMobileEquipmentIdentity2\s+(.+)/);
+        const imei2Match = text.match(/^\s*InternationalMobileEquipmentIdentity2\s+(.+)/m);
         const imei2 = imei2Match ? imei2Match[1].trim() : '';
 
         let iphoneSeries = 'Unknown / Not in DB';
