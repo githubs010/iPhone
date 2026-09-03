@@ -36,6 +36,10 @@
             <input type="text" id="modelNumber" required>
         </div>
         <div class="form-group">
+            <label for="serialNumber">Serial Number</label>
+            <input type="text" id="serialNumber" required>
+        </div>
+        <div class="form-group">
             <label for="colour">Colour</label>
             <input type="text" id="colour" required>
         </div>
@@ -63,7 +67,6 @@
 <script>
     const scriptURL = 'https://script.google.com/macros/s/AKfycbz5NImuD9H5lApJ9T2EXR7ZiCQXj421htZcco2jfoxuu67R3s-bFM4_Pp7k5By401GI/exec';
 
-    // Master Database for iPhone Models
     const iphoneDB = {
         // iPhone 13 - (PRODUCT)RED
         "MLPJ3": { series: "iPhone 13", color: "(PRODUCT)RED" },
@@ -166,23 +169,23 @@
         }
 
         const modelNo = extractValue('ModelNumber');
+        const serialNo = extractValue('SerialNumber');
         const deviceName = extractValue('DeviceName');
         const imei1 = extractValue('InternationalMobileEquipmentIdentity');
         
         const imei2Match = text.match(/InternationalMobileEquipmentIdentity2\s+(.+)/);
         const imei2 = imei2Match ? imei2Match[1].trim() : '';
 
-        // Dictionary Lookup Logic
         let iphoneSeries = 'Unknown / Not in DB';
         let colour = 'Unknown / Not in DB';
 
-        // Check if the parsed model number exists in our database
         if (iphoneDB[modelNo]) {
             iphoneSeries = iphoneDB[modelNo].series;
             colour = iphoneDB[modelNo].color;
         }
 
         document.getElementById('modelNumber').value = modelNo;
+        document.getElementById('serialNumber').value = serialNo;
         document.getElementById('colour').value = colour;
         document.getElementById('iphoneSeries').value = iphoneSeries;
         document.getElementById('imei1').value = imei1;
@@ -201,6 +204,7 @@
 
         const formData = {
             modelNumber: document.getElementById('modelNumber').value,
+            serialNumber: document.getElementById('serialNumber').value,
             colour: document.getElementById('colour').value,
             iphoneSeries: document.getElementById('iphoneSeries').value,
             imei1: document.getElementById('imei1').value,
