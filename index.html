@@ -40,6 +40,10 @@
             <input type="text" id="serialNumber" required>
         </div>
         <div class="form-group">
+            <label for="storage">Storage</label>
+            <input type="text" id="storage" required>
+        </div>
+        <div class="form-group">
             <label for="colour">Colour</label>
             <input type="text" id="colour" required>
         </div>
@@ -67,96 +71,103 @@
 <script>
     const scriptURL = 'https://script.google.com/macros/s/AKfycbz5NImuD9H5lApJ9T2EXR7ZiCQXj421htZcco2jfoxuu67R3s-bFM4_Pp7k5By401GI/exec';
 
+    // Master Database for iPhone Models
     const iphoneDB = {
+        // iPhone 14 Pro
+        "MQ143": { series: "iPhone 14 Pro", color: "Gold", storage: "256 GB" },
+        "MQ163": { series: "iPhone 14 Pro", color: "Gold", storage: "256 GB" },
+        "MQ183": { series: "iPhone 14 Pro", color: "Gold", storage: "256 GB" },
+        "MQ173": { series: "iPhone 14 Pro", color: "Gold", storage: "256 GB" },
+
         // iPhone 13 - (PRODUCT)RED
-        "MLPJ3": { series: "iPhone 13", color: "(PRODUCT)RED" },
-        "MLMQ3": { series: "iPhone 13", color: "(PRODUCT)RED" },
-        "MLDX3": { series: "iPhone 13", color: "(PRODUCT)RED" },
-        "MLNF3": { series: "iPhone 13", color: "(PRODUCT)RED" },
-        "MLQ93": { series: "iPhone 13", color: "(PRODUCT)RED" },
-        "MLN03": { series: "iPhone 13", color: "(PRODUCT)RED" },
-        "MLE33": { series: "iPhone 13", color: "(PRODUCT)RED" },
-        "MLNL3": { series: "iPhone 13", color: "(PRODUCT)RED" },
-        "MLQF3": { series: "iPhone 13", color: "(PRODUCT)RED" },
-        "MLN53": { series: "iPhone 13", color: "(PRODUCT)RED" },
-        "MLEA3": { series: "iPhone 13", color: "(PRODUCT)RED" },
-        "MLNR3": { series: "iPhone 13", color: "(PRODUCT)RED" },
+        "MLPJ3": { series: "iPhone 13", color: "(PRODUCT)RED", storage: "128 GB" },
+        "MLMQ3": { series: "iPhone 13", color: "(PRODUCT)RED", storage: "128 GB" },
+        "MLDX3": { series: "iPhone 13", color: "(PRODUCT)RED", storage: "128 GB" },
+        "MLNF3": { series: "iPhone 13", color: "(PRODUCT)RED", storage: "128 GB" },
+        "MLQ93": { series: "iPhone 13", color: "(PRODUCT)RED", storage: "256 GB" },
+        "MLN03": { series: "iPhone 13", color: "(PRODUCT)RED", storage: "256 GB" },
+        "MLE33": { series: "iPhone 13", color: "(PRODUCT)RED", storage: "256 GB" },
+        "MLNL3": { series: "iPhone 13", color: "(PRODUCT)RED", storage: "256 GB" },
+        "MLQF3": { series: "iPhone 13", color: "(PRODUCT)RED", storage: "512 GB" },
+        "MLN53": { series: "iPhone 13", color: "(PRODUCT)RED", storage: "512 GB" },
+        "MLEA3": { series: "iPhone 13", color: "(PRODUCT)RED", storage: "512 GB" },
+        "MLNR3": { series: "iPhone 13", color: "(PRODUCT)RED", storage: "512 GB" },
 
         // iPhone 13 - Starlight
-        "MLPG3": { series: "iPhone 13", color: "Starlight" },
-        "MLMM3": { series: "iPhone 13", color: "Starlight" },
-        "MLDV3": { series: "iPhone 13", color: "Starlight" },
-        "MLND3": { series: "iPhone 13", color: "Starlight" },
-        "3J818": { series: "iPhone 13", color: "Starlight" },
-        "MLQ73": { series: "iPhone 13", color: "Starlight" },
-        "MLMX3": { series: "iPhone 13", color: "Starlight" },
-        "MLE13": { series: "iPhone 13", color: "Starlight" },
-        "MLNJ3": { series: "iPhone 13", color: "Starlight" },
-        "MLQD3": { series: "iPhone 13", color: "Starlight" },
-        "MLN33": { series: "iPhone 13", color: "Starlight" },
-        "MLE73": { series: "iPhone 13", color: "Starlight" },
-        "MLNP3": { series: "iPhone 13", color: "Starlight" },
+        "MLPG3": { series: "iPhone 13", color: "Starlight", storage: "128 GB" },
+        "MLMM3": { series: "iPhone 13", color: "Starlight", storage: "128 GB" },
+        "MLDV3": { series: "iPhone 13", color: "Starlight", storage: "128 GB" },
+        "MLND3": { series: "iPhone 13", color: "Starlight", storage: "128 GB" },
+        "3J818": { series: "iPhone 13", color: "Starlight", storage: "128 GB" },
+        "MLQ73": { series: "iPhone 13", color: "Starlight", storage: "256 GB" },
+        "MLMX3": { series: "iPhone 13", color: "Starlight", storage: "256 GB" },
+        "MLE13": { series: "iPhone 13", color: "Starlight", storage: "256 GB" },
+        "MLNJ3": { series: "iPhone 13", color: "Starlight", storage: "256 GB" },
+        "MLQD3": { series: "iPhone 13", color: "Starlight", storage: "512 GB" },
+        "MLN33": { series: "iPhone 13", color: "Starlight", storage: "512 GB" },
+        "MLE73": { series: "iPhone 13", color: "Starlight", storage: "512 GB" },
+        "MLNP3": { series: "iPhone 13", color: "Starlight", storage: "512 GB" },
 
         // iPhone 13 - Midnight
-        "MLA23": { series: "iPhone 13", color: "Midnight" },
-        "MLPF3": { series: "iPhone 13", color: "Midnight" },
-        "MLML3": { series: "iPhone 13", color: "Midnight" },
-        "MLDU3": { series: "iPhone 13", color: "Midnight" },
-        "MLNC3": { series: "iPhone 13", color: "Midnight" },
-        "3J817": { series: "iPhone 13", color: "Midnight" },
-        "3J827": { series: "iPhone 13", color: "Midnight" },
-        "3M761": { series: "iPhone 13", color: "Midnight" },
-        "MLQ63": { series: "iPhone 13", color: "Midnight" },
-        "MLN23": { series: "iPhone 13", color: "Midnight" },
-        "MLE03": { series: "iPhone 13", color: "Midnight" },
-        "MLNH3": { series: "iPhone 13", color: "Midnight" },
-        "MLQC3": { series: "iPhone 13", color: "Midnight" },
-        "MLE63": { series: "iPhone 13", color: "Midnight" },
-        "MLNN3": { series: "iPhone 13", color: "Midnight" },
+        "MLA23": { series: "iPhone 13", color: "Midnight", storage: "128 GB" },
+        "MLPF3": { series: "iPhone 13", color: "Midnight", storage: "128 GB" },
+        "MLML3": { series: "iPhone 13", color: "Midnight", storage: "128 GB" },
+        "MLDU3": { series: "iPhone 13", color: "Midnight", storage: "128 GB" },
+        "MLNC3": { series: "iPhone 13", color: "Midnight", storage: "128 GB" },
+        "3J817": { series: "iPhone 13", color: "Midnight", storage: "128 GB" },
+        "3J827": { series: "iPhone 13", color: "Midnight", storage: "128 GB" },
+        "3M761": { series: "iPhone 13", color: "Midnight", storage: "128 GB" },
+        "MLQ63": { series: "iPhone 13", color: "Midnight", storage: "256 GB" },
+        "MLN23": { series: "iPhone 13", color: "Midnight", storage: "256 GB" },
+        "MLE03": { series: "iPhone 13", color: "Midnight", storage: "256 GB" },
+        "MLNH3": { series: "iPhone 13", color: "Midnight", storage: "256 GB" },
+        "MLQC3": { series: "iPhone 13", color: "Midnight", storage: "512 GB" },
+        "MLE63": { series: "iPhone 13", color: "Midnight", storage: "512 GB" },
+        "MLNN3": { series: "iPhone 13", color: "Midnight", storage: "512 GB" },
 
         // iPhone 13 - Blue
-        "MLPK3": { series: "iPhone 13", color: "Blue" },
-        "MLMT3": { series: "iPhone 13", color: "Blue" },
-        "MLDY3": { series: "iPhone 13", color: "Blue" },
-        "MLNG3": { series: "iPhone 13", color: "Blue" },
-        "3J821": { series: "iPhone 13", color: "Blue" },
-        "MLQA3": { series: "iPhone 13", color: "Blue" },
-        "MLN13": { series: "iPhone 13", color: "Blue" },
-        "MLE43": { series: "iPhone 13", color: "Blue" },
-        "MLNM3": { series: "iPhone 13", color: "Blue" },
-        "MLQG3": { series: "iPhone 13", color: "Blue" },
-        "MLN83": { series: "iPhone 13", color: "Blue" },
-        "MLEC3": { series: "iPhone 13", color: "Blue" },
-        "MLNT3": { series: "iPhone 13", color: "Blue" },
+        "MLPK3": { series: "iPhone 13", color: "Blue", storage: "128 GB" },
+        "MLMT3": { series: "iPhone 13", color: "Blue", storage: "128 GB" },
+        "MLDY3": { series: "iPhone 13", color: "Blue", storage: "128 GB" },
+        "MLNG3": { series: "iPhone 13", color: "Blue", storage: "128 GB" },
+        "3J821": { series: "iPhone 13", color: "Blue", storage: "128 GB" },
+        "MLQA3": { series: "iPhone 13", color: "Blue", storage: "256 GB" },
+        "MLN13": { series: "iPhone 13", color: "Blue", storage: "256 GB" },
+        "MLE43": { series: "iPhone 13", color: "Blue", storage: "256 GB" },
+        "MLNM3": { series: "iPhone 13", color: "Blue", storage: "256 GB" },
+        "MLQG3": { series: "iPhone 13", color: "Blue", storage: "512 GB" },
+        "MLN83": { series: "iPhone 13", color: "Blue", storage: "512 GB" },
+        "MLEC3": { series: "iPhone 13", color: "Blue", storage: "512 GB" },
+        "MLNT3": { series: "iPhone 13", color: "Blue", storage: "512 GB" },
 
         // iPhone 13 - Pink
-        "MLPH3": { series: "iPhone 13", color: "Pink" },
-        "MLMN3": { series: "iPhone 13", color: "Pink" },
-        "MLDW3": { series: "iPhone 13", color: "Pink" },
-        "MLNE3": { series: "iPhone 13", color: "Pink" },
-        "MLQ83": { series: "iPhone 13", color: "Pink" },
-        "MLMY3": { series: "iPhone 13", color: "Pink" },
-        "MLE23": { series: "iPhone 13", color: "Pink" },
-        "MLNK3": { series: "iPhone 13", color: "Pink" },
-        "MLQE3": { series: "iPhone 13", color: "Pink" },
-        "MLN43": { series: "iPhone 13", color: "Pink" },
-        "MLE93": { series: "iPhone 13", color: "Pink" },
-        "MLNQ3": { series: "iPhone 13", color: "Pink" },
+        "MLPH3": { series: "iPhone 13", color: "Pink", storage: "128 GB" },
+        "MLMN3": { series: "iPhone 13", color: "Pink", storage: "128 GB" },
+        "MLDW3": { series: "iPhone 13", color: "Pink", storage: "128 GB" },
+        "MLNE3": { series: "iPhone 13", color: "Pink", storage: "128 GB" },
+        "MLQ83": { series: "iPhone 13", color: "Pink", storage: "256 GB" },
+        "MLMY3": { series: "iPhone 13", color: "Pink", storage: "256 GB" },
+        "MLE23": { series: "iPhone 13", color: "Pink", storage: "256 GB" },
+        "MLNK3": { series: "iPhone 13", color: "Pink", storage: "256 GB" },
+        "MLQE3": { series: "iPhone 13", color: "Pink", storage: "512 GB" },
+        "MLN43": { series: "iPhone 13", color: "Pink", storage: "512 GB" },
+        "MLE93": { series: "iPhone 13", color: "Pink", storage: "512 GB" },
+        "MLNQ3": { series: "iPhone 13", color: "Pink", storage: "512 GB" },
 
         // iPhone 13 - Green
-        "MNGD3": { series: "iPhone 13", color: "Green" },
-        "MNG93": { series: "iPhone 13", color: "Green" },
-        "MNGK3": { series: "iPhone 13", color: "Green" },
-        "MNGG3": { series: "iPhone 13", color: "Green" },
-        "3K581": { series: "iPhone 13", color: "Green" },
-        "MNGE3": { series: "iPhone 13", color: "Green" },
-        "MNGA3": { series: "iPhone 13", color: "Green" },
-        "MNGL3": { series: "iPhone 13", color: "Green" },
-        "MNGH3": { series: "iPhone 13", color: "Green" },
-        "MNGF3": { series: "iPhone 13", color: "Green" },
-        "MNGC3": { series: "iPhone 13", color: "Green" },
-        "MNGM3": { series: "iPhone 13", color: "Green" },
-        "MNGJ3": { series: "iPhone 13", color: "Green" }
+        "MNGD3": { series: "iPhone 13", color: "Green", storage: "128 GB" },
+        "MNG93": { series: "iPhone 13", color: "Green", storage: "128 GB" },
+        "MNGK3": { series: "iPhone 13", color: "Green", storage: "128 GB" },
+        "MNGG3": { series: "iPhone 13", color: "Green", storage: "128 GB" },
+        "3K581": { series: "iPhone 13", color: "Green", storage: "128 GB" },
+        "MNGE3": { series: "iPhone 13", color: "Green", storage: "256 GB" },
+        "MNGA3": { series: "iPhone 13", color: "Green", storage: "256 GB" },
+        "MNGL3": { series: "iPhone 13", color: "Green", storage: "256 GB" },
+        "MNGH3": { series: "iPhone 13", color: "Green", storage: "256 GB" },
+        "MNGF3": { series: "iPhone 13", color: "Green", storage: "512 GB" },
+        "MNGC3": { series: "iPhone 13", color: "Green", storage: "512 GB" },
+        "MNGM3": { series: "iPhone 13", color: "Green", storage: "512 GB" },
+        "MNGJ3": { series: "iPhone 13", color: "Green", storage: "512 GB" }
     };
 
     function parseRawData() {
@@ -178,14 +189,17 @@
 
         let iphoneSeries = 'Unknown / Not in DB';
         let colour = 'Unknown / Not in DB';
+        let storage = 'Unknown / Not in DB';
 
         if (iphoneDB[modelNo]) {
             iphoneSeries = iphoneDB[modelNo].series;
             colour = iphoneDB[modelNo].color;
+            storage = iphoneDB[modelNo].storage;
         }
 
         document.getElementById('modelNumber').value = modelNo;
         document.getElementById('serialNumber').value = serialNo;
+        document.getElementById('storage').value = storage;
         document.getElementById('colour').value = colour;
         document.getElementById('iphoneSeries').value = iphoneSeries;
         document.getElementById('imei1').value = imei1;
@@ -205,6 +219,7 @@
         const formData = {
             modelNumber: document.getElementById('modelNumber').value,
             serialNumber: document.getElementById('serialNumber').value,
+            storage: document.getElementById('storage').value,
             colour: document.getElementById('colour').value,
             iphoneSeries: document.getElementById('iphoneSeries').value,
             imei1: document.getElementById('imei1').value,
